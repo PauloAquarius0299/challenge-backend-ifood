@@ -4,12 +4,14 @@ import com.paulotech.Desafio.backend.IFood.Api.domain.products.ProductDTO;
 import com.paulotech.Desafio.backend.IFood.Api.domain.products.Products;
 import com.paulotech.Desafio.backend.IFood.Api.services.ProductService;
 import jakarta.websocket.server.PathParam;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/product")
 public class ProductsController {
     private ProductService service;
@@ -31,13 +33,13 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Products> update(@PathParam("id") String id, @RequestBody ProductDTO productData){
+    public ResponseEntity<Products> update(@PathVariable("id") String id, @RequestBody ProductDTO productData){
         Products updatedProducts = this.service.update(id, productData);
         return ResponseEntity.ok().body(updatedProducts);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Products> delete(@PathParam("id") String id){
+    public ResponseEntity<Products> delete(@PathVariable("id") String id){
         this.service.delete(id);
         return ResponseEntity.noContent().build();
     }
