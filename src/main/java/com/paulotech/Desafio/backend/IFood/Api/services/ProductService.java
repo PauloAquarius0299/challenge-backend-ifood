@@ -12,10 +12,10 @@ import java.util.List;
 
 @Service
 public class ProductService {
-    private CategoryService categoryService;
-    private ProductRepository repository;
+    private final CategoryService categoryService;
+    private final ProductRepository repository;
 
-    public ProductService(CategoryService categoryService, ProductRepository productRepository){
+    public ProductService(CategoryService categoryService, ProductRepository repository){
         this.categoryService = categoryService;
         this.repository = repository;
     }
@@ -29,15 +29,15 @@ public class ProductService {
         return newProduct;
     }
 
-    public List<Products> getAll(){
-        return this.repository.findAll();
-    }
 
     public Products update(String id, ProductDTO productData){
         Products products = this.repository.findById(id)
                 .orElseThrow(ProductsNotFoundExceptions::new);
 
-        this.categoryService.getById(productData.categoryId()).ifPresent(products::setCategory);
+        if(productData.categoryId() != null) {
+            this.categoryService.getById(productData.categoryId())
+                    .ifPresent(products::setCategory);
+        }
 
         if(!productData.title().isEmpty()) products.setTitle(productData.title());
         if(!productData.description().isEmpty()) products.setDescription(productData.description());
@@ -52,4 +52,9 @@ public class ProductService {
                 .orElseThrow(ProductsNotFoundExceptions::new);
         this.repository.delete(products);
     }
+
+    public List<Products> getAll(){
+        return this.repository.findAll();
+    }
 }
+

@@ -12,10 +12,9 @@ import java.util.List;
 
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/category")
 public class CategoryController {
-    private CategoryService service;
+    private final CategoryService service;
 
     public CategoryController(CategoryService service){
         this.service = service;

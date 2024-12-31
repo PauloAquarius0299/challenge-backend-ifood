@@ -4,18 +4,16 @@ import com.paulotech.Desafio.backend.IFood.Api.domain.categories.Category;
 import com.paulotech.Desafio.backend.IFood.Api.domain.categories.CategoryDTO;
 import com.paulotech.Desafio.backend.IFood.Api.domain.categories.exceptions.CategoryNotFoundException;
 import com.paulotech.Desafio.backend.IFood.Api.repositories.CategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
-    private CategoryRepository repository;
-
-    public CategoryService(CategoryRepository repository){
-        this.repository = repository;
-    }
+    private final CategoryRepository repository;
 
     public Category insert(CategoryDTO categoryData){
         Category newCategory = new Category(categoryData);
@@ -23,13 +21,6 @@ public class CategoryService {
         return newCategory;
     }
 
-    public List<Category> getAll(){
-        return this.repository.findAll();
-    }
-
-    public Optional<Category> getById(String id){
-        return this.repository.findById(id);
-    }
 
     public Category update(String id, CategoryDTO categoryData){
         Category category = this.repository.findById(id)
@@ -45,6 +36,14 @@ public class CategoryService {
         Category category = this.repository.findById(id)
                 .orElseThrow(CategoryNotFoundException::new);
         this.repository.delete(category);
+    }
+
+    public List<Category> getAll(){
+        return this.repository.findAll();
+    }
+
+    public Optional<Category> getById(String id){
+        return this.repository.findById(id);
     }
 
 }

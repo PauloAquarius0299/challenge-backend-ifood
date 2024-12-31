@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document(collation = "categories")
+@Document(collection = "categories")
 public class Category {
     @Id
     private String id;
