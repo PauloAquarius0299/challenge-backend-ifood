@@ -6,6 +6,8 @@ import com.paulotech.Desafio.backend.IFood.Api.domain.products.ProductDTO;
 import com.paulotech.Desafio.backend.IFood.Api.domain.products.Products;
 import com.paulotech.Desafio.backend.IFood.Api.domain.products.exceptions.ProductsNotFoundExceptions;
 import com.paulotech.Desafio.backend.IFood.Api.repositories.ProductRepository;
+import com.paulotech.Desafio.backend.IFood.Api.services.aws.AwsSnsService;
+import com.paulotech.Desafio.backend.IFood.Api.services.aws.MessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +16,12 @@ import java.util.List;
 public class ProductService {
     private final CategoryService categoryService;
     private final ProductRepository repository;
+    private final AwsSnsService snsService;
 
-    public ProductService(CategoryService categoryService, ProductRepository repository){
+    public ProductService(CategoryService categoryService, ProductRepository repository, AwsSnsService snsService){
         this.categoryService = categoryService;
         this.repository = repository;
+        this.snsService = snsService;
     }
 
     public Products insert(ProductDTO productDTO){
@@ -26,6 +30,7 @@ public class ProductService {
         Products newProduct = new Products(productDTO);
         newProduct.setCategory(category);
         this.repository.save(newProduct);
+        this.snsService.publish(new MessageDTO(newProduct.getOwnerId()));
         return newProduct;
     }
 
@@ -44,6 +49,7 @@ public class ProductService {
         if(!(productData.price() == null)) products.setPrice(productData.price());
 
         this.repository.save(products);
+        this.snsService.publish(new MessageDTO(products.getOwnerId()));
         return products;
     }
 
