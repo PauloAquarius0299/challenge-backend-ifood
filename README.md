@@ -9,7 +9,7 @@ Resolvendo desafio vaga backend com Java Spring, MongoDB, AWS, Lambda, S3, SQS e
 * No controlador, mapeei corretamente as requisições para que os endpoints funcionem adequadamente.
 
 ## Codigo para a lambda 
-função AWS Lambda projetada para processar mensagens a fila SQS e atualizar objetos armazenados no bucket S3.
+A função em Nodejs para AWS Lambda projetada para processar mensagens a fila SQS e atualizar objetos armazenados no bucket S3.
 ```
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"; 
 
